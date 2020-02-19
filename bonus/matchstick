@@ -1,0 +1,292 @@
+#!/usr/bin/python3
+
+import time
+import sys
+from random import*
+
+
+k = 0 #variable universelle
+n = 1 #variable universelle
+
+def init():
+        print("Bienvenue sur le jeu des bâtonnets !") #coucou
+        time.sleep(0.5) #Attend 1 seconde avant de lancer la suite
+        print("Vous choisirez avec combien de bâtonnets vous souhaiterai jouer ulterieurement. Vous devez, à votre tour, en retirer, 1, 2, ou 3.") #Afficher la Règle
+        time.sleep(0.5)
+        print("Celui qui se voit contraint de retirer le dernier bâtonnet a perdu.") #Afficher la Règle
+        time.sleep(0.5)
+        print("Voulez vous jouer au jeu des bâtonnets, [joueur/IA/IA+]?")
+        Menu()
+
+def Menu():
+        z = input()
+        if (z == "joueur" or z == "IA" or z == "IA+"):
+                if z == "joueur" :
+                        print ("vous allez jouer contre un autre joueur")
+                        time.sleep(1.0)
+                        jouer()
+                elif z ==  "IA":
+                        print ("vous allez jouer contre une IA")
+                        time.sleep(1.0)
+                        jouerIA()
+                elif z == "IA+":
+                        print ("vous allez jouer contre une IA imbatable")
+                        time.sleep(1.0)
+                        jouerIA1()
+        else:
+                print ("J'ai dit joueur ou IA ou IA+, et pas autre chose")
+                time.sleep(1.0)
+                Init()
+def jouerIA1(): #IA compliquer
+         print ("[oui/non/retour]") 
+         a = input() 
+         if (a == "oui" or a == "non" or a == "retour"):
+                 if a == "oui":                                                          #\n sauter une ligne
+                         nb = input("Combien de bâtonnets voulez vous prendre pour cette partie ?\n") 
+                         nb = int(nb) #sert a recuperer le texte entré et le transforme en nombre
+                         afficherIA1(nb, n, k) 
+                 if a == "non":  
+                          print("je suis déçu")
+                          time.sleep(2)
+                          sys.exit()
+                 else:
+                         print("vous allez revenir au menu précédent")
+                         time.sleep(2)
+                         init()
+         else:
+                 print ("la réponse attendue est oui ou non ou retour")
+                 jouerIA1()
+
+                
+def jouerIA(): #IA simple
+        print ("[oui/non/retour]") 
+        a = input() #on rentre si oui ou non on joue
+        if (a == "oui" or a == "non" or a == "retour"): 
+                if a == "oui":                                                          #\n sauter une ligne
+                        nb = input("Combien de bâtonnets voulez vous prendre pour cette partie ?\n") 
+                        nb = int(nb) #sert a recuperer le texte entré et le transforme en nombre
+                        afficherIA(nb, n) 
+                if a == "non":  
+                        print("je suis déçu")
+                        time.sleep(2)
+                        sys.exit()
+                else:
+                        print("vous allez revenir au menu précédent")
+                        time.sleep(2)
+                        init()
+        else:
+                print ("la réponse attendue est oui ou non ou retour")
+                jouerIA()
+
+def jouer(): #joueur contre joueur
+        print ("[oui/non/retour]")
+        a = input() #on rentre si oui ou non on joue
+        if (a == "oui" or a == "non" or a == "retour"): 
+                if a == "oui":                                                          #\n sauter une ligne
+                        nb = input("Combien de bâtonnets voulez vous prendre pour cette partie ?\n") 
+                        nb = int(nb) #sert a recuperer le texte entré et le transforme en nombre
+                        afficher(nb, n) 
+                if a == "non":  
+                        print("je suis déçu")
+                        time.sleep(2)
+                        sys.exit()
+                else:
+                        print("vous allez revenir au menu précédent")
+                        time.sleep(2)
+                        Menu()
+        else:
+                print ("la réponse attendue est oui ou non ou retour")
+                jouer()
+                        
+
+def afficher(num, n):
+        b = num
+        AfficherBaton(b)
+        if n == 1:
+                 demanderNombre(b, n)
+        else:
+                demanderNombre2(b, n)
+
+def demanderNombre(b, n): #tour J1
+        print ("Joueur 1 c'est a toi")
+        print ("il reste", b, "bâtonnet(s)")
+        c = input("Combien veut-tu en prendre ? [1, 2 ou 3]\n") 
+        if (c == "1" or c == "2" or c == "3"):
+                c = int(c) #recupere le nombre texte et le transforme en nombre
+                b -= c
+                n += 1
+                boucle(b, n)                
+        else:
+                print("j'ai dis 1, 2 ou 3 batonnets")
+                demanderNombre(b, n)#si on prend plus de trois batonnets ou moins de 1 batonnets reprend
+
+def demanderNombre2(b, n): #tour J2
+        print("Joueur 2 c'est a toi")
+        print ("il reste", b, "bâtonnets")
+        d = input("Combien veut-tu en prendre ? [1, 2 ou 3]\n")
+        if (d == "1" or d == "2" or d == "3"):
+                d = int(d)
+                b -= d
+                n -= 1
+                boucle(b, n)
+        else:
+                print("j'ai dis 1, 2 ou 3 batonnets")
+                demanderNombre2(b, n)
+        
+def boucle(b, n):
+        while b > 1:
+                afficher(b, n) #tant qu'il reste plus d'un bâtonnet retour a afficher(b)
+        AfficherBaton(b) #afficher le nombre de batons qu'il reste
+        if n == 1:
+                print("Malheureusement, joueur 1 vous avez perdu")
+                fin() #va à la variable fin
+        else:
+                print("Malheureusement, joueur 2 vous avez perdu")
+                fin()
+
+def fin():
+        print("voulez vous rejouer")
+        jouer() #retour à la variable jouer
+
+
+def AfficherBaton(b): #afficher les bâtonnets en visuel
+        a = str() # liste
+        for i in range(0, b):
+                a += "| " 
+        print(a)
+
+def IA(b, n):
+        print("L'IA c'est a toi")
+        time.sleep(1.0)
+        print ("il reste", b, "bâtonnet(s)")
+        e = randint (1, 3)
+        b -= e
+        n -= 1
+        print (e)
+        boucleIA(b, n)
+
+def afficherIA(num, n):
+        b = num
+        AfficherBaton(b)
+        if n == 1:
+                 demanderNombreIA(b, n)
+        else:
+                 IA(b, n)
+
+def boucleIA(b, n):
+        while b > 1:
+                afficherIA(b, n) #tant qu'il reste plus d'un bâtonnet retour a afficher(b)
+        AfficherBaton(b) #afficher le nombre de batons qu'il reste
+        if n == 1:
+                print("Malheureusement, joueur 1 vous avez perdu")
+                finIA() #va à la variable fin
+        else:
+                print("L'IA s'avoue vaincue, pour cette fois")
+                finIA()
+
+def demanderNombreIA(b, n):
+        print ("Joueur 1 c'est a toi")
+        print ("il reste", b, "bâtonnet(s)")
+        c = input("Combien veut-tu en prendre ? (1, 2 ou 3)\n") 
+        if (c == "1" or c == "2" or c == "3"):
+                c = int(c) #recupere le nombre texte et le transforme en nombre
+                b -= c
+                n += 1
+                boucleIA(b, n)                
+        else:
+                print("j'ai dis 1, 2 ou 3 batonnets")
+                demanderNombreIA(b, n)#si on prend plus de trois batonnets ou moins de 1 batonnets reprend
+
+def afficherIA1(num, n, k): #on récupère N pour le tour et K car on l'appel dans les fonctions appelées
+        b = num
+        AfficherBaton(b)
+        if n == 1:
+                 IA1(b, n)
+        elif n == 2:
+                 DemanderIA1(b, n, k)
+        elif n == 3:
+                IA2(b, n, k)
+                 
+
+def IA1(b, n):
+        print("L'IA c'est a toi")
+        time.sleep(1.0)
+        print ("il reste", b, "bâtonnets")
+        if b == 20:
+                b -= 3
+                n += 1
+                print (3)
+                boucleIA1(b, n, k)
+                
+def DemanderIA1(b, n, k):
+        print ("Joueur 1 c'est a toi")
+        print ("il reste", b, "bâtonnet(s)")
+        x = input("Combien veut-tu en prendre ? (1, 2 ou 3)\n")
+        if x == "1":
+                x = int(x)#recupere le nombre texte et le transforme en nombre
+                k = 1
+                b -= x
+                n += 1
+                boucleIA1(b, n, k)
+        elif x == "2":
+                x = int(x)#recupere le nombre texte et le transforme en nombre
+                k = 2
+                b -= x
+                n += 1
+                boucleIA1(b, n, k)
+        elif x == "3":
+                x = int(x)#recupere le nombre texte et le transforme en nombre
+                k = 3
+                b -= x
+                n += 1
+                boucleIA1(b, n, k)
+                
+        else:
+                print("j'ai dis 1, 2 ou 3 batonnets")
+                DemanderIA1(b, n, k)#si on prend plus de trois batonnets ou moins de 1 batonnets reprend
+
+
+def boucleIA1(b, n, k):
+        while b > 1:
+                afficherIA1(b, n, k) #tant qu'il reste plus d'un bâtonnet retour a afficher(b)
+        AfficherBaton(b) #afficher le nombre de batons qu'il reste
+        print("Malheureusement, joueur 1 vous avez perdu")
+        finIA1() #va à la variable fin
+
+def IA2(b, n, k):
+        print("l'IA c'est à toi")
+        print ("il reste", b, "bâtonnet(s)")
+        time.sleep(1.5)
+        if k == 1:
+                b -= 3
+                k -= 1
+                n -= 1
+                print(3)
+                boucleIA1(b, n, k)
+        elif k == 2:
+                b -= 2
+                k -= 2
+                n -= 1
+                print(2)
+                boucleIA1(b, n, k)
+        elif k == 3:
+                b -= 1
+                k -= 3
+                n -= 1
+                print(1)
+                boucleIA1(b, n, k)
+
+def finIA():
+        print("voulez vous rejouer")
+        jouerIA() #retour à la variable jouer
+
+def finIA1():
+        print("voulez vous rejouer")
+        jouerIA1() #retour à la variable jouer
+
+
+
+
+
+
+init()

@@ -14,8 +14,6 @@ void print_board_game(int line, int nb_matches, char **map, char **av)
     int i = my_getnbr(av[1]);
     i = i + (i-1);
 
-    printf("%d %d %d\n", i, line, nb_matches);
-
     while (map[line][i] != '\0' && nb_matches > 0) {
         if (map[line][i] == '|') {
             map[line][i] = ' ';
